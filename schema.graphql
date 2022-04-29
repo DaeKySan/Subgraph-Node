@@ -1,6 +1,31 @@
-type ExampleEntity @entity {
+
+type Owner @entity(immutable: true) {
   id: ID!
-  count: BigInt!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
+  collectionIds: [Collection!]!
+  tokens: [Token!]! @delivedFrom(field:"owner")
 }
+
+type Collection @entity(immutable: true) {
+  id: ID!
+  tokenIds
+  owner: [Owner!]!
+}
+
+type Token @entity(immutable: true) {
+  id: ID!
+  tokenId: Int!
+  contact: TokenContact!
+  owner: Owner
+}
+
+type OwnerCollection @entity(immutable: true) {
+  id: Bytes!
+  owner: Owner!
+  collection: Collection!
+}
+
+type TokenContact @entity(immutable: true){
+  id: ID!
+  token: [Token!]! @delivedFrom(field: "contact") 
+}
+
